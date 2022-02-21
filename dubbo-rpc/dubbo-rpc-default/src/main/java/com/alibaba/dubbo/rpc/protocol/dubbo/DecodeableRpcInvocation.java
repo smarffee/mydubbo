@@ -39,6 +39,7 @@ import java.util.Map;
 import static com.alibaba.dubbo.rpc.protocol.dubbo.CallbackServiceCodec.decodeInvocationArgument;
 
 /**
+ * 生成者解码后的请求
  * @author <a href="mailto:gang.lvg@alibaba-inc.com">kimi</a>
  */
 public class DecodeableRpcInvocation extends RpcInvocation implements Codec, Decodeable {

@@ -27,6 +27,8 @@ import java.util.Map;
 /**
  * RPC Invocation.
  *
+ * 消费者发送的请求
+ *
  * @author qian.lei
  * @serial Don't change the class name and properties.
  */

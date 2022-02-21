@@ -42,7 +42,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ServiceFactoryBean
+ * 我们来研究一下 Dubbo 导出服务的过程。
+ *
+ * ServiceBean 是 Dubbo 与 Spring 框架进行整合的关键，
+ * 可以看做是两个框架之间的桥梁。
+ * 具有同样作用的类还有 ReferenceBean。
+ *
+ * Dubbo 服务导出过程始于 Spring 容器发布刷新事件，Dubbo 在接收到事件后，会立即执行服务导出逻辑。
+ * 整个逻辑大致可分为三个部分，
+ * 第一部分是前置工作，主要用于检查参数，组装 URL。
+ * 第二部分是导出服务，包含导出服务到本地 (JVM)，和导出服务到远程两个过程。
+ * 第三部分是向注册中心注册服务，用于服务发现。
+ *
+ * 服务导出的入口方法是 ServiceBean 的 onApplicationEvent。
+ * onApplicationEvent 是一个事件响应方法，
+ * 该方法会在收到 Spring 上下文刷新事件后执行服务导出操作。
  *
  * @author william.liangf
  * @export
@@ -113,23 +127,48 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
         return service;
     }
 
+    /**
+     *  onApplicationEvent 方法在经过一些判断后，会决定是否调用 export 方法导出服务
+     * @param event
+     */
     public void onApplicationEvent(ApplicationEvent event) {
         if (ContextRefreshedEvent.class.getName().equals(event.getClass().getName())) {
+            /*
+             * 是否有延迟导出 && 是否已导出 && 是不是己被取消导出
+             *
+             * 这个方法首先会根据条件决定是否导出服务，比如有些服务设置了延时导出，那么此时就不应该在此处导出。
+             * 还有一些服务已经被导出了，或者当前服务被取消导出了，此时也不能再次导出相关服务。
+             * 注意这里的 isDelay 方法，这个方法字面意思是“是否延迟导出服务”，返回 true 表示延迟导出，false 表示不延迟导出。
+             * 但是该方法真实意思却并非如此，当方法返回 true 时，表示无需延迟导出。返回 false 时，表示需要延迟导出。
+             * 与字面意思恰恰相反，
+             */
             if (isDelay() && !isExported() && !isUnexported()) {
                 if (logger.isInfoEnabled()) {
                     logger.info("The service ready on spring started. service: " + getInterface());
                 }
+
+                // 导出服务
                 export();
             }
         }
     }
 
     private boolean isDelay() {
+        // 获取 delay
         Integer delay = getDelay();
         ProviderConfig provider = getProvider();
         if (delay == null && provider != null) {
+            // 如果前面获取的 delay 为空，这里继续获取
             delay = provider.getDelay();
         }
+        /*
+         * upportedApplicationListener 变量含义：
+         * 该变量用于表示当前的 Spring 容器是否支持 ApplicationListener，这个值初始为 false。
+         * 在 Spring 容器将自己设置到 ServiceBean 中时，
+         * ServiceBean 的 setApplicationContext 方法会检测 Spring 容器是否支持 ApplicationListener。
+         * 若支持，则将 supportedApplicationListener 置为 true。
+         */
+        // 判断 delay 是否为空，或者等于 -1
         return supportedApplicationListener && (delay == null || delay == -1);
     }
 

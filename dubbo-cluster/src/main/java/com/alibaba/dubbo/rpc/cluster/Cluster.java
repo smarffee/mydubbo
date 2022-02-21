@@ -27,6 +27,11 @@ import com.alibaba.dubbo.rpc.cluster.support.FailoverCluster;
  * <a href="http://en.wikipedia.org/wiki/Computer_cluster">Cluster</a>
  * <a href="http://en.wikipedia.org/wiki/Fault-tolerant_system">Fault-Tolerant</a>
  *
+ * 集群接口 Cluster 和 Cluster Invoker，这两者是不同的。
+ * Cluster 是接口，而 Cluster Invoker 是一种 Invoker。
+ * 服务提供者的选择逻辑，以及远程调用失败后的的处理逻辑均是封装在 Cluster Invoker 中。
+ * 那么 Cluster 接口和相关实现类有什么用呢？用途比较简单，仅用于生成 Cluster Invoker。
+ *
  * @author william.liangf
  */
 @SPI(FailoverCluster.NAME)

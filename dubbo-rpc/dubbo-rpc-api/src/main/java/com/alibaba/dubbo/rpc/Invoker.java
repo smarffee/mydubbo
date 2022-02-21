@@ -20,6 +20,21 @@ import com.alibaba.dubbo.common.Node;
 /**
  * Invoker. (API/SPI, Prototype, ThreadSafe)
  *
+ * Invoker 是 Dubbo 的核心模型，代表一个可执行体。
+ * 在服务提供方，Invoker 用于调用服务提供类。
+ * 在服务消费方，Invoker 用于执行远程调用。
+ *
+ * Invoker 是由 Protocol 实现类构建而来。
+ * Protocol 实现类有很多，最常用的两个分别是 RegistryProtocol 和 DubboProtocol
+ *
+ *
+ * Invoker 是实体域，
+ * 它是 Dubbo 的核心模型，其它模型都向它靠扰，或转换成它，
+ * 它代表一个可执行体，可向它发起 invoke 调用，
+ * 它有可能是一个本地的实现，也可能是一个远程的实现，也可能一个集群实现。
+ *
+ * Invoker 是由 ProxyFactory 创建而来，Dubbo 默认的 ProxyFactory 实现类是 JavassistProxyFactory。
+ *
  * @author william.liangf
  * @see com.alibaba.dubbo.rpc.Protocol#refer(Class, com.alibaba.dubbo.common.URL)
  * @see com.alibaba.dubbo.rpc.InvokerListener

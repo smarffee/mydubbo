@@ -32,6 +32,7 @@ public class FailoverCluster implements Cluster {
     public final static String NAME = "failover";
 
     public <T> Invoker<T> join(Directory<T> directory) throws RpcException {
+        // 创建并返回 FailoverClusterInvoker 对象
         return new FailoverClusterInvoker<T>(directory);
     }
 

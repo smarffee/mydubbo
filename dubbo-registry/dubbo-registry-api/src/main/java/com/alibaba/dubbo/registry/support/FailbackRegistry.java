@@ -38,6 +38,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * FailbackRegistry. (SPI, Prototype, ThreadSafe)
  *
+ * 以 Zookeeper 为例，所谓的服务注册，本质上是将服务配置数据写入到 Zookeeper 的某个路径的节点下。
+ *
  * @author william.liangf
  */
 public abstract class FailbackRegistry extends AbstractRegistry {
@@ -133,11 +135,13 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         failedUnregistered.remove(url);
         try {
             // 向服务器端发送注册请求
+            // 模板方法，由子类实现
             doRegister(url);
         } catch (Exception e) {
             Throwable t = e;
 
             // 如果开启了启动时检测，则直接抛出异常
+            // 获取 check 参数，若 check = true 将会直接抛出异常
             boolean check = getUrl().getParameter(Constants.CHECK_KEY, true)
                     && url.getParameter(Constants.CHECK_KEY, true)
                     && !Constants.CONSUMER_PROTOCOL.equals(url.getProtocol());
@@ -152,6 +156,7 @@ public abstract class FailbackRegistry extends AbstractRegistry {
             }
 
             // 将失败的注册请求记录到失败列表，定时重试
+            // 记录注册失败的链接
             failedRegistered.add(url);
         }
     }

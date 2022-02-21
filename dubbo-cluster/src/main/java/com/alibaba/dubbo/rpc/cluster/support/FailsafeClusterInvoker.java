@@ -29,6 +29,11 @@ import java.util.List;
 
 /**
  * 失败安全，出现异常时，直接忽略，通常用于写入审计日志等操作。
+ *
+ * FailsafeClusterInvoker 是一种失败安全的 Cluster Invoker。
+ * 所谓的失败安全是指，当调用过程中出现异常时，FailsafeClusterInvoker 仅会打印异常，而不会抛出异常。
+ * 适用于写入审计日志等操作。
+ *
  * <p>
  * <a href="http://en.wikipedia.org/wiki/Fail-safe">Fail-safe</a>
  *
@@ -44,10 +49,17 @@ public class FailsafeClusterInvoker<T> extends AbstractClusterInvoker<T> {
     public Result doInvoke(Invocation invocation, List<Invoker<T>> invokers, LoadBalance loadbalance) throws RpcException {
         try {
             checkInvokers(invokers, invocation);
+
+            // 选择 Invoker
             Invoker<T> invoker = select(loadbalance, invocation, invokers, null);
+
+            // 进行远程调用
             return invoker.invoke(invocation);
         } catch (Throwable e) {
+            // 打印错误日志，但不抛出
             logger.error("Failsafe ignore exception: " + e.getMessage(), e);
+
+            // 返回空结果忽略错误
             return new RpcResult(); // ignore
         }
     }

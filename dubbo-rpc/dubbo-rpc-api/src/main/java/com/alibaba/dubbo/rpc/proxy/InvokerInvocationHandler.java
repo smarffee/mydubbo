@@ -28,6 +28,10 @@ import java.lang.reflect.Method;
  */
 public class InvokerInvocationHandler implements InvocationHandler {
 
+    /**
+     * 实际类型
+     * {@link com.alibaba.dubbo.rpc.cluster.support.wrapper.MockClusterInvoker}
+     */
     private final Invoker<?> invoker;
 
     public InvokerInvocationHandler(Invoker<?> handler) {

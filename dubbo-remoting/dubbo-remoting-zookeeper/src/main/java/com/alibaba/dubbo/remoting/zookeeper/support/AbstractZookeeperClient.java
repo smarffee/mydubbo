@@ -33,14 +33,22 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
         return url;
     }
 
+    /**
+     * 通过递归创建当前节点的上一级路径，然后再根据 ephemeral 的值决定创建临时还是持久节点
+     * @param path
+     * @param ephemeral
+     */
     public void create(String path, boolean ephemeral) {
         int i = path.lastIndexOf('/');
         if (i > 0) {
             String parentPath = path.substring(0, i);
             if (!checkExists(parentPath)) {
+                // 递归创建上一级路径
                 create(parentPath, false);
             }
         }
+
+        // 根据 ephemeral 的值创建临时或持久节点
         if (ephemeral) {
             createEphemeral(path);
         } else {
