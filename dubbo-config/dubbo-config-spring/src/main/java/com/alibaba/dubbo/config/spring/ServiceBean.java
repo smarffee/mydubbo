@@ -54,6 +54,10 @@ import java.util.Map;
  * 第二部分是导出服务，包含导出服务到本地 (JVM)，和导出服务到远程两个过程。
  * 第三部分是向注册中心注册服务，用于服务发现。
  *
+ * Dubbo 支持两种服务导出方式，分别延迟导出和立即导出。
+ * 延迟导出的入口是 ServiceBean 的 afterPropertiesSet 方法，
+ * 立即导出的入口是 ServiceBean 的 onApplicationEvent 方法。
+ *
  * 服务导出的入口方法是 ServiceBean 的 onApplicationEvent。
  * onApplicationEvent 是一个事件响应方法，
  * 该方法会在收到 Spring 上下文刷新事件后执行服务导出操作。
