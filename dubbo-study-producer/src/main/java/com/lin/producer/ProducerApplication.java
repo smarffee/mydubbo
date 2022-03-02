@@ -5,7 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.concurrent.TimeUnit;
 
-public class Application {
+public class ProducerApplication {
 
     public static void main(String[] args) throws InterruptedException {
 

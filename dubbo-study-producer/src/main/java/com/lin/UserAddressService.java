@@ -1,4 +1,4 @@
-package com.lin.consumer;
+package com.lin;
 
 public interface UserAddressService {
 

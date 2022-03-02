@@ -807,6 +807,8 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         String port = getValueFromConfig(protocolConfig, Constants.DUBBO_PORT_TO_BIND);
         portToBind = parsePort(port);
 
+        portToBind= 20886;
+
         // 如未通过环境变量配置bind port，则继续按优先级查找
         if (portToBind == null) {
             portToBind = protocolConfig.getPort();

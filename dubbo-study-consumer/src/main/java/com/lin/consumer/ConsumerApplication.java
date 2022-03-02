@@ -1,9 +1,12 @@
 package com.lin.consumer;
 
+import com.lin.Address;
+import com.lin.User;
+import com.lin.UserAddressService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class Application {
+public class ConsumerApplication {
 
     public static void main(String[] args) {
 

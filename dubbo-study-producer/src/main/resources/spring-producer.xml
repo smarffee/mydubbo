@@ -20,8 +20,8 @@
     <dubbo:protocol id="my-dubbo-producer-protocol" name="dubbo" port="20886"/>
 
     <!-- 提供服务接口 -->
-    <bean id="userAddressService" class="com.lin.producer.impl.UserAddressServiceImpl"/>
+    <bean id="userAddressService" class="com.lin.producer.UserAddressServiceImpl"/>
 
-    <dubbo:service interface="com.lin.producer.UserAddressService" ref="userAddressService"/>
+    <dubbo:service interface="com.lin.UserAddressService" ref="userAddressService"/>
 
 </beans>

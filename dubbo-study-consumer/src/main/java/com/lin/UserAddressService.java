@@ -1,4 +1,4 @@
-package com.lin.producer;
+package com.lin;
 
 public interface UserAddressService {
 

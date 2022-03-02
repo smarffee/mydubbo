@@ -1,10 +1,20 @@
-package com.lin.producer;
+package com.lin;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private int userId;
 
     private String userName;
+
+    public User() {
+    }
+
+    public User(int userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+    }
 
     public int getUserId() {
         return userId;
