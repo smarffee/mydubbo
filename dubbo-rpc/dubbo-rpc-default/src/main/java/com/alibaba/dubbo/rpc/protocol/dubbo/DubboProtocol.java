@@ -313,6 +313,23 @@ public class DubboProtocol extends AbstractProtocol {
         ExchangeServer server;
         try {
             // 创建 ExchangeServer
+            /*
+             * dubbo://192.168.47.1:20886/com.lin.UserAddressService?
+             * anyhost=true&
+             * application=dubbo-study-producer-application&
+             * bind.ip=192.168.47.1&
+             * bind.port=20886&
+             * channel.readonly.sent=true&
+             * codec=dubbo&
+             * dubbo=2.0.0&
+             * generic=false&
+             * heartbeat=60000&
+             * interface=com.lin.UserAddressService&
+             * methods=queryAddressByUser&
+             * pid=13612&
+             * side=provider&
+             * timestamp=1646336063956
+             */
             server = Exchangers.bind(url, requestHandler);
         } catch (RemotingException e) {
             throw new RpcException("Fail to start server(url: " + url + ") " + e.getMessage(), e);

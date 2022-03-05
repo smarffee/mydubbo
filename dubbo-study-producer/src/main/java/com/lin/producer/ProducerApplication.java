@@ -12,7 +12,7 @@ public class ProducerApplication {
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("spring-producer.xml");
 
-        System.out.println("服务端成功启动");
+        System.out.println("服务端成功启动" );
 
         Thread.sleep(10000000);
     }

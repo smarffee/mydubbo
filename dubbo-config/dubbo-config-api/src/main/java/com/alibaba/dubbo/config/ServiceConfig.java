@@ -410,7 +410,15 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
      */
     private void doExportUrls() {
         // 加载注册中心链接
-        List<URL> registryURLs = loadRegistries(true);
+        /*
+         * registry://192.168.47.129:2181/com.alibaba.dubbo.registry.RegistryService?
+         * application=dubbo-study-producer-application&
+         * dubbo=2.0.0&
+         * pid=8092&
+         * registry=zookeeper&
+         * timestamp=1646335629458
+         */
+         List<URL> registryURLs = loadRegistries(true);
         // 遍历 protocols，并在每个协议下导出服务
         for (ProtocolConfig protocolConfig : protocols) {
             doExportUrlsFor1Protocol(protocolConfig, registryURLs);
@@ -612,6 +620,20 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
 
         // 组装 URL
+        /*
+         * dubbo://192.168.47.1:20886/com.lin.UserAddressService?
+         * anyhost=true&
+         * application=dubbo-study-producer-application&
+         * bind.ip=192.168.47.1&
+         * bind.port=20886&
+         * dubbo=2.0.0&
+         * generic=false&
+         * interface=com.lin.UserAddressService&
+         * methods=queryAddressByUser&
+         * pid=2180&
+         * side=provider&
+         * timestamp=1646335866115
+         */
         URL url = new URL(name, host, port,
                 (contextPath == null || contextPath.length() == 0 ? "" : contextPath + "/") + path, map);
 
@@ -673,7 +695,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                         Invoker<?> invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass,
                                 registryURL.addParameterAndEncoded(Constants.EXPORT_KEY, url.toFullString()));
 
-                        // 导出服务，并生成 Exporter
+                        // 导出服务，并生成 Exporter, RegistryProtocol
                         Exporter<?> exporter = protocol.export(invoker);
 
                         exporters.add(exporter);
@@ -702,6 +724,20 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
      */
     private void exportLocal(URL url) {
         //如果 URL 的协议头等于 injvm，说明已经导出到本地了，无需再次导出
+        /*
+         * injvm://127.0.0.1/com.lin.UserAddressService?
+         * anyhost=true&
+         * application=dubbo-study-producer-application&
+         * bind.ip=192.168.47.1&
+         * bind.port=20886&
+         * dubbo=2.0.0&
+         * generic=false&
+         * interface=com.lin.UserAddressService&
+         * methods=queryAddressByUser&
+         * pid=9172&
+         * side=provider&
+         * timestamp=1646335957241
+         */
         if (!Constants.LOCAL_PROTOCOL.equalsIgnoreCase(url.getProtocol())) {
             URL local = URL.valueOf(url.toFullString())
                     .setProtocol(Constants.LOCAL_PROTOCOL) // 设置协议头为 injvm
@@ -806,8 +842,6 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         // 解析环境变量配置的bind port
         String port = getValueFromConfig(protocolConfig, Constants.DUBBO_PORT_TO_BIND);
         portToBind = parsePort(port);
-
-        portToBind= 20886;
 
         // 如未通过环境变量配置bind port，则继续按优先级查找
         if (portToBind == null) {

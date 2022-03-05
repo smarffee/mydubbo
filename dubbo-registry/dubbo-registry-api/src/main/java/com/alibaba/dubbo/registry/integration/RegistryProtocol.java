@@ -126,7 +126,7 @@ public class RegistryProtocol implements Protocol {
      */
     public <T> Exporter<T> export(final Invoker<T> originInvoker) throws RpcException {
         //export invoker
-        // 导出服务
+        // 导出服务, 开启 netty 服务器
         final ExporterChangeableWrapper<T> exporter = doLocalExport(originInvoker);
 
         //registry provider

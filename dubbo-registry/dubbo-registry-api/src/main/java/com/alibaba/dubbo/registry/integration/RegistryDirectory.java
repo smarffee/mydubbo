@@ -516,7 +516,7 @@ public class RegistryDirectory<T> extends AbstractDirectory<T> implements Notify
                         enabled = url.getParameter(Constants.ENABLED_KEY, true);
                     }
                     if (enabled) {
-                        // 调用 refer 获取 Invoker
+                        // 调用 refer 获取 Invoker -> DubboInvoker -> 内部持有一个 ExchangeClient
                         invoker = new InvokerDelegete<T>(protocol.refer(serviceType, url), url, providerUrl);
                     }
                 } catch (Throwable t) {
